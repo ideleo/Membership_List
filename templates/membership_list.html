@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+
+  <title>Membership List</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="static/stylesheets/bootstrap_1.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar  sticky-top navbar-expand-lg navbar-dark navbar-fixed-top" style="background-color: #119FBF;"> 
+    <div class="container">
+      <a class="navbar-brand" href="/membership_list">Membership list</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+		  {% if (membership_list_presets.user_type != "sys_admin") %}
+		   <li class="nav-item {% if membership_list_presets.screen=='extract' %}active{% endif %}">
+            <a class="nav-link" href="/membership_extract">Extract
+			<span class="sr-only">(current)</span>
+			</a>
+          </li>
+          <li class="nav-item {% if membership_list_presets.screen=='view_list' %}active{% endif %}">
+            <a class="nav-link" href="/membership_input">Register
+             <span class="sr-only">(current)</span>
+            </a>
+          </li>
+		  <li class="nav-item {% if membership_list_presets.screen=='view_list' %}active{% endif %}">
+            <a class="nav-link" href="/membership_list">View list
+			<span class="sr-only">(current)</span>
+			</a>
+          </li>
+		  {% endif %}
+		  {% if (membership_list_presets.user_type == "admin" or membership_list_presets.user_type == "sys_admin") %}
+		   <li class="nav-item {% if membership_list_presets.screen=='view_list' %}active{% endif %}">
+            <a class="nav-link" href="/membership_users">Users
+			<span class="sr-only">(current)</span>
+			</a>
+          </li>
+		  {% endif %}
+		  <li class="nav-item {% if membership_list_presets.screen=='view_list' %}active{% endif %}">
+            <a class="nav-link" href="/membership_my_user">My User
+			<span class="sr-only">(current)</span>
+			</a>
+		  </li>
+		   <li class="nav-item {% if membership_list_presets.screen=='view_list' %}active{% endif %}">
+            <a class="nav-link" href="/membership_login">Logout
+			<span class="sr-only">(current)</span>
+			</a>
+          </li>
+		    <li>
+				<form class="form-inline my-2 my-lg-0" action="/membership_search">
+					<input class="form-control mr-sm-2" type="search" name="search">
+					<button class="btn btn-outline-success my-2 my-sm-0 fa fa-search" style="background-color: #119FBF; color: white; 
+					border: 2px solid white" id="id_submit_button" onclick="$('#id_submit_button').css('color''background-color', '#FFFFFF' );"> Search</button>
+				</form>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+ 	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h2 class="mt-5">View List</h2> 
+			</div> 
+		</div>	
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<th><a href="/membership_list?option=4&sort=name">Name</a></th>
+				<th><a href="/membership_list?option=4&sort=surname">Surname</a></th>
+				<th><a href="/membership_list?option=4&sort=membership_no">Membership_no</a></th>
+				<th><a href="/membership_list?option=4&sort=email">Email</a></th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for my_line in my_data %}
+			<tr>
+				<td><a href="/membership_input?option=2&key={{my_line.key}}">{{my_line.name}}</td>
+				<td>{{my_line.surname}}</td>
+				<td>{{my_line.membership_no}}</td>
+				<td><a href="mailto:{{my_line.email}}">{{my_line.email}}</a></td>
+				<td><a href="/membership_input?option=3&key={{my_line.key}}">Delete</a></td>
+				<td><a href="/membership_input?option=5&key={{my_line.key}}">Copy</a></td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	</div>
+	  <br>
+<footer class="footer fixed-bottom position-sticky" style="background-color: white">
+   <div class="footer-copyright text-center py-3"><span style="font-size: 85%"><b>©2020 Copyright: <a href="mailto:ivano.deleo@gmail.com" style ="color: #119FBF">Ivano De Leo </a></b>{{membership_list_presets.date}} {{membership_list_presets.time}}</span>
+  </div>
+</footer>
+	
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="static/js/vendor/popper.min.js"></script>
+    <script src="static/js/bootstrap.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="static/js/vendor/holder.min.js"></script>
+</body>
+
+</html>
